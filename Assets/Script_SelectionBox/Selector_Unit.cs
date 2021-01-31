@@ -52,7 +52,7 @@ public class Selector_Unit : MonoBehaviour
             startPosition = DoRay();
             selectorBox.SetActive(true);
         }
-
+        //Draw the selection rectangle
         if(Input.GetMouseButton(0))
         {
             endPosition = DoRay();
@@ -60,7 +60,7 @@ public class Selector_Unit : MonoBehaviour
             selectorBox.transform.position = rect_Center;
             selectorBox.transform.localScale = rect_Size + new Vector3(0f,1f,0f);
         }
-
+        //Deselect all unit and destroy the selection cube
         if (Input.GetMouseButtonUp(0))
         {
             selectorBox.SetActive(false);
@@ -80,42 +80,65 @@ public class Selector_Unit : MonoBehaviour
                 Vector3 newPlacement = startPosition;
                 for (int i = 0; i < selectedUnits.Count; i++)
                 {
-                    GameObject clone;
+                    if (i == 0)
+                    {
+                        UnitFormationIndicators.Add(Instantiate(Unit_FormationIndicatorSize, newPlacement, Quaternion.identity).gameObject);
+                        continue;
+                    }
+                    //Detect when a new colum must begin (depending of the size of the units list)
                     if (i % minRowFormation == 0)
                     {
                         newPlacement.x = startPosition.x;
                         newPlacement.z -= selectedUnits[0].transform.localScale.z;
-                        clone = Instantiate(Unit_FormationIndicatorSize, newPlacement, Quaternion.identity);
-                        UnitFormationIndicators.Add(clone.gameObject);
                     }
+                    //align units one after another, next to each other
                     else
                     {
                         newPlacement.x += (selectedUnits[0].transform.localScale.x) + 0.1f;
-                        clone = Instantiate(Unit_FormationIndicatorSize, newPlacement, Quaternion.identity);
-                        UnitFormationIndicators.Add(clone.gameObject);
                     }
+                    UnitFormationIndicators.Add(Instantiate(Unit_FormationIndicatorSize, newPlacement, Quaternion.identity).gameObject);
                 }
 
             }
+            // align units depending of the direction of the mouse
             if (Input.GetMouseButton(1))
             {
                 endPosition = DoRay();
-                Ray mousDrag = new Ray(startPosition, endPosition);
+                Vector3 dir = (endPosition - startPosition).normalized;
+                Ray mousDrag = new Ray(startPosition, dir);
                 Vector3 newPlacement = startPosition;
+                //Debug.DrawLine(startPosition, startPosition + dir * 10, UnityEngine.Color.red, Mathf.Infinity);
+                int NumRow = 0;
                 for (int i = 0; i < UnitFormationIndicators.Count; i++)
                 {
-                    if (i % minRowFormation == 0 )
+                    if(i == 0)
                     {
-                        newPlacement.x = startPosition.x - 1f;
-                        newPlacement.z = startPosition.z + 1f;
                         UnitFormationIndicators[i].transform.position = newPlacement;
+                        continue;
+                    }
+                    if (i % minRowFormation == 0)
+                    {
+
+                        NumRow += 1;
+                        newPlacement = mousDrag.GetPoint((startPosition+UnitFormationIndicators[0].transform.localPosition).magnitude) ;
+                        /*
+                        newPlacement.x = UnitFormationIndicators[0].transform.position.x - (1f * NumRow);
+                        newPlacement.z = UnitFormationIndicators[0].transform.position.z + (1f * NumRow);
+                        */
+
                     }
                     else
                     {
-                        newPlacement.x += 1f;
-                        newPlacement.z += 1f;
-                        UnitFormationIndicators[i].transform.position = newPlacement;
+                        newPlacement = mousDrag.GetPoint(Mathf.Abs((UnitFormationIndicators[i - 1].transform.localPosition).magnitude + 0.1f));
+                        /*
+                        newPlacement = mousDrag.GetPoint(UnitFormationIndicators[i-1].transform.position.magnitude);
+                        
+                        newPlacement.x += UnitFormationIndicators[i-1].transform.position.x + (0.1f * i);
+                        newPlacement.z += UnitFormationIndicators[i-1].transform.position.z + (0.1f * i);
+                        */
+
                     }
+                    UnitFormationIndicators[i].transform.position = newPlacement;
                 }
             }
 
@@ -125,10 +148,10 @@ public class Selector_Unit : MonoBehaviour
                 {
                     Destroy(clone.gameObject);
                 }
-
                 UnitFormationIndicators.Clear();
             }
         }
+        Debug.DrawLine(startPosition, endPosition);
     }
     private GameObject UnitFormationCylinder(Transform Unitscale)
     {
