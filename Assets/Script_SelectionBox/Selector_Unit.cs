@@ -14,10 +14,10 @@ public class Selector_Unit : MonoBehaviour
     public Vector3 endPosition;
 
     [Header("Selection Box Info")]
-    public RectangleF rect_selectionRect;
-    public Vector3 rect_Center;
-    public Vector3 rect_Size;
-    public Vector3 rect_halfExtents;
+    public RectangleF rectSelectionRect;
+    public Vector3 rectCenter;
+    public Vector3 rectSize;
+    public Vector3 rectHalfExtents;
 
     [Header("All Currently Selected Units")]
     public List<GameObject> selectedUnits;
@@ -57,8 +57,8 @@ public class Selector_Unit : MonoBehaviour
         {
             endPosition = DoRay();
             HandleRectangle();
-            selectorBox.transform.position = rect_Center;
-            selectorBox.transform.localScale = rect_Size + new Vector3(0f,1f,0f);
+            selectorBox.transform.position = rectCenter;
+            selectorBox.transform.localScale = rectSize + new Vector3(0f,1f,0f);
         }
         //Deselect all unit and destroy the selection cube
         if (Input.GetMouseButtonUp(0))
@@ -100,48 +100,128 @@ public class Selector_Unit : MonoBehaviour
                 }
 
             }
+            
             // align units depending of the direction of the mouse
             if (Input.GetMouseButton(1))
             {
+                //Unit Info
+                int unitCount = UnitFormationIndicators.Count;
+
+                //RAY
                 endPosition = DoRay();
-                Vector3 dir = (endPosition - startPosition).normalized;
+                float rayDistance = (startPosition - endPosition).magnitude;
+                float separation = 0.05f;
+                float unitSize = UnitFormationIndicators[0].transform.localScale.x;
+
+                //RAYCAST
+                Vector3 dir = (endPosition - startPosition);
                 Ray mousDrag = new Ray(startPosition, dir);
-                Vector3 newPlacement = startPosition;
-                //Debug.DrawLine(startPosition, startPosition + dir * 10, UnityEngine.Color.red, Mathf.Infinity);
-                int NumRow = 0;
-                for (int i = 0; i < UnitFormationIndicators.Count; i++)
+                Vector3 rowStartPosition = startPosition;
+                Vector3 rowEndPosition = endPosition;
+
+                int nbRow = 0;
+
+                if (rayDistance < unitSize)
                 {
-                    if(i == 0)
-                    {
-                        UnitFormationIndicators[i].transform.position = newPlacement;
-                        continue;
-                    }
-                    if (i % minRowFormation == 0)
-                    {
-
-                        NumRow += 1;
-                        newPlacement = mousDrag.GetPoint((startPosition+UnitFormationIndicators[0].transform.localPosition).magnitude) ;
-                        /*
-                        newPlacement.x = UnitFormationIndicators[0].transform.position.x - (1f * NumRow);
-                        newPlacement.z = UnitFormationIndicators[0].transform.position.z + (1f * NumRow);
-                        */
-
-                    }
-                    else
-                    {
-                        newPlacement = mousDrag.GetPoint(Mathf.Abs((UnitFormationIndicators[i - 1].transform.localPosition).magnitude + 0.1f));
-                        /*
-                        newPlacement = mousDrag.GetPoint(UnitFormationIndicators[i-1].transform.position.magnitude);
-                        
-                        newPlacement.x += UnitFormationIndicators[i-1].transform.position.x + (0.1f * i);
-                        newPlacement.z += UnitFormationIndicators[i-1].transform.position.z + (0.1f * i);
-                        */
-
-                    }
-                    UnitFormationIndicators[i].transform.position = newPlacement;
+                    /*
+                    Debug.Log("RAY DDISTANCE: " + rayDistance);
+                    Debug.Log("UNIT SIZE: " + unitSize);
+                    */
+                    Debug.Log("RAY DDISTANCE 1: " + rayDistance);
                 }
-            }
+                else if (rayDistance >= (unitSize + separation) * (maxRowFormation) || ((unitCount <= maxRowFormation) && (rayDistance == unitCount)))
+                {
+                    Debug.Log("RAY DDISTANCE 2: " + rayDistance);
+                    for (int i = 0; i < unitCount; i++)
+                    {
+                        if (i != 0 && i % maxRowFormation == 0)
+                        {
+                            nbRow += 1;
+                            rowStartPosition = startPosition - (Vector3.Cross(dir, Vector3.up).normalized * nbRow);
+                            rowEndPosition = endPosition - (Vector3.Cross(dir, Vector3.up).normalized * nbRow);
+                            //dir = (rowEndPosition - rowStartPosition);
+                            mousDrag = new Ray(rowStartPosition, dir);
+                            UnitFormationIndicators[i].transform.position = mousDrag.GetPoint( Mathf.Abs(rowStartPosition.magnitude * ((i - maxRowFormation * nbRow) * 0.05f)) );
+                            //DEBUG HELP
+                            Debug.DrawLine(rowStartPosition, rowEndPosition);
+                            Debug.DrawLine(Vector3.Cross(dir, Vector3.up), rowEndPosition);
+                        }
+                        else
+                        {
+                            UnitFormationIndicators[i].transform.position = mousDrag.GetPoint( Mathf.Abs(rowStartPosition.magnitude * ((i - (maxRowFormation * nbRow)) * 0.05f)) );
+                        }
+                    }
+                }
+                
+                else if(rayDistance > (minRowFormation*(unitSize+separation)) && rayDistance < (maxRowFormation * (unitSize + separation)))
+                {
+                    Debug.Log("RAY DDISTANCE 3: " + rayDistance);
+                    float currentRowMax = Mathf.Ceil(rayDistance / (unitSize + separation));
+                    for (int i = 0; i < unitCount; i++)
+                    {
+                        float positionStart = rowStartPosition.magnitude;
+                        //Debug.Log("positionStart: " + positionStart);
+                        if (i != 0 && i % currentRowMax == 0)
+                        {
+                            nbRow += 1;
+                            //TRANSLATION D'UN VECTOR SUR UNE DISTANCE X Vector3 newSpot = oldSpotVector3 + (directionVector3.normalized * distanceFloat)
+                            // PERPENDICULAIRE/PRODUIT SCALAIRE : Vecteur  A(ax,ay) perpendiculaire à B(bx;by) si (ax*bx + ay*by) = 0 DANS UNITY: Vector3.Cross()
+                            rowStartPosition = startPosition - (Vector3.Cross(dir, Vector3.up).normalized * nbRow);
+                            rowEndPosition = endPosition - (Vector3.Cross(dir, Vector3.up).normalized * nbRow);
 
+                            //dir = (rowEndPosition - rowStartPosition);
+                            mousDrag = new Ray(rowStartPosition, dir);
+                            if( (i-unitCount > 0) && (i - unitCount <= currentRowMax))
+                            {
+                                positionStart = ((rowStartPosition / 2f) + (rowEndPosition / 2f)).magnitude;
+                                UnitFormationIndicators[i].transform.position = mousDrag.GetPoint(Mathf.Abs(positionStart * ((i - currentRowMax) * nbRow) * 0.05f));
+                                Debug.Log("positionStartDERNIERELIGNE: " + Mathf.Abs(positionStart * (Mathf.Min(1, (i - currentRowMax * nbRow)) * 0.05f)));
+                            }
+                            else
+                            {
+                                //positionStart = rowStartPosition.magnitude;
+                                UnitFormationIndicators[i].transform.position = mousDrag.GetPoint(Mathf.Abs(positionStart * ((i - currentRowMax * nbRow) * 0.05f)));
+                            }
+
+                            //UnitFormationIndicators[i].transform.position = mousDrag.GetPoint(Mathf.Abs(positionStart * ((i - currentRowMax * nbRow) * 0.05f)));
+                            //DEBUG HELP
+                            Debug.DrawLine(rowStartPosition, rowEndPosition);
+                            Debug.DrawLine(Vector3.Cross(dir, Vector3.up), rowEndPosition);
+                        }
+                        else
+                        {
+                            UnitFormationIndicators[i].transform.position = mousDrag.GetPoint(Mathf.Abs(positionStart * ((i - (currentRowMax * nbRow)) * 0.05f)));
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < unitCount; i++)
+                    {
+                        if (i != 0 && i % minRowFormation == 0)
+                        {
+                            nbRow += 1;
+                            rowStartPosition = startPosition - (Vector3.Cross(dir, Vector3.up).normalized * nbRow);
+                            rowEndPosition = endPosition - (Vector3.Cross(dir, Vector3.up).normalized * nbRow);
+                            //dir = (rowEndPosition - rowStartPosition);
+                            mousDrag = new Ray(rowStartPosition, dir);
+
+                            UnitFormationIndicators[i].transform.position = mousDrag.GetPoint(Mathf.Abs(rowStartPosition.magnitude * ((i - minRowFormation * nbRow) * 0.05f)));
+                            
+                            //DEBUG HELP
+                            Debug.DrawLine(rowStartPosition, rowEndPosition);
+                            Debug.DrawLine(Vector3.Cross(dir, Vector3.up), rowEndPosition);
+                        }
+
+                        else
+                        {
+                            UnitFormationIndicators[i].transform.position = mousDrag.GetPoint(Mathf.Abs(rowStartPosition.magnitude * ((i - (minRowFormation * nbRow)) * 0.05f)));
+                        }
+                    }
+                }
+                
+            }
+            
             if (Input.GetMouseButtonUp(1))
             {
                 foreach(GameObject clone in UnitFormationIndicators)
@@ -153,7 +233,8 @@ public class Selector_Unit : MonoBehaviour
         }
         Debug.DrawLine(startPosition, endPosition);
     }
-    private GameObject UnitFormationCylinder(Transform Unitscale)
+
+private GameObject UnitFormationCylinder(Transform Unitscale)
     {
         //a terme DEVRA repéré cavalerie = triangle; troupe à pied = cylindre
         Unit_FormationIndicatorSize = GameObject.Find("Unit_FormationIndicator");
@@ -164,14 +245,14 @@ public class Selector_Unit : MonoBehaviour
 
     private void HandleRectangle()
     {
-        rect_Size = startPosition - endPosition;
-        rect_Size.x = Mathf.Abs(rect_Size.x);
-        rect_Size.y = Mathf.Abs(rect_Size.y);
-        rect_Size.z = Mathf.Abs(rect_Size.z);
+        rectSize = startPosition - endPosition;
+        rectSize.x = Mathf.Abs(rectSize.x);
+        rectSize.y = Mathf.Abs(rectSize.y);
+        rectSize.z = Mathf.Abs(rectSize.z);
 
-        rect_Center = (startPosition + endPosition) * 0.5f;
+        rectCenter = (startPosition + endPosition) * 0.5f;
 
-        rect_halfExtents = rect_Size * 0.5f;
+        rectHalfExtents = rectSize * 0.5f;
     }
 
     private void ClearAllUnits()
@@ -192,7 +273,7 @@ public class Selector_Unit : MonoBehaviour
     {
         ClearAllUnits();
 
-        RaycastHit[] check = Physics.BoxCastAll(rect_Center, rect_halfExtents, Vector3.up);
+        RaycastHit[] check = Physics.BoxCastAll(rectCenter, rectHalfExtents, Vector3.up);
         //verify that colliders are units
         for(int i = 0; i < check.Length; i++)
         {
@@ -229,7 +310,7 @@ public class Selector_Unit : MonoBehaviour
     {
         //cube we draw
         Gizmos.color = UnityEngine.Color.green;
-        Gizmos.DrawWireCube(rect_Center, rect_Size);
+        Gizmos.DrawWireCube(rectCenter, rectSize);
         //start point of the cube
         Gizmos.color = UnityEngine.Color.yellow;
         Gizmos.DrawWireSphere(startPosition, 0.5f);
