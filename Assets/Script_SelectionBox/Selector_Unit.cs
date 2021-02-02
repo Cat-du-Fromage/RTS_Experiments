@@ -113,7 +113,7 @@ public class Selector_Unit : MonoBehaviour
                 //RAY
                 endPosition = DoRay();
                 float rayDistance = (startPosition - endPosition).magnitude;
-                float separation = 0.05f;
+                float separation = 0.1f;
                 float unitSize = Mathf.Abs(UnitFormationIndicators[0].transform.localScale.x);
 
                 //RAYCAST
@@ -126,15 +126,11 @@ public class Selector_Unit : MonoBehaviour
 
                 if (rayDistance < unitSize)
                 {
-                    /*
-                    Debug.Log("RAY DDISTANCE: " + rayDistance);
-                    Debug.Log("UNIT SIZE: " + unitSize);
-                    */
-                    Debug.Log("RAY DDISTANCE 1: " + rayDistance);
+                    //DEFINIR UN RANGEMENT
+                   
                 }
                 else if (rayDistance >= (unitSize + separation) * (maxRowFormation) || ((unitCount <= maxRowFormation) && (rayDistance == unitCount)))
                 {
-                    Debug.Log("RAY DDISTANCE 2: " + rayDistance);
                     for (int i = 0; i < unitCount; i++)
                     {
                         if (i != 0 && i % maxRowFormation == 0)
@@ -144,16 +140,11 @@ public class Selector_Unit : MonoBehaviour
                             rowEndPosition = endPosition - (Vector3.Cross(dir, Vector3.up).normalized * nbRow);
                             dir = (rowEndPosition - rowStartPosition);
                             mousDrag = new Ray(rowStartPosition, dir);
-                            UnitFormationIndicators[i].transform.position = mousDrag.GetPoint(Mathf.Abs(((i - maxRowFormation * nbRow) * 0.5f)));
-                            //UnitFormationIndicators[i].transform.position = mousDrag.GetPoint( Mathf.Abs(rowStartPosition.magnitude * ((i - maxRowFormation * nbRow) * 0.05f)) );
-                            //DEBUG HELP
-                            Debug.DrawLine(rowStartPosition, rowEndPosition);
-                            Debug.DrawLine(Vector3.Cross(dir, Vector3.up), rowEndPosition);
+                            UnitFormationIndicators[i].transform.position = mousDrag.GetPoint(Mathf.Abs(((i - maxRowFormation * nbRow) * (unitSize + separation))));
                         }
                         else
                         {
-                            UnitFormationIndicators[i].transform.position = mousDrag.GetPoint(Mathf.Abs(((i - maxRowFormation * nbRow) * 0.5f)));
-                            //UnitFormationIndicators[i].transform.position = mousDrag.GetPoint( Mathf.Abs(rowStartPosition.magnitude * ((i - (maxRowFormation * nbRow)) * 0.05f)) );
+                            UnitFormationIndicators[i].transform.position = mousDrag.GetPoint(Mathf.Abs(((i - maxRowFormation * nbRow) * (unitSize + separation))));
                         }
                     }
                 }
@@ -162,6 +153,7 @@ public class Selector_Unit : MonoBehaviour
                 {
                     Debug.Log("RAY DDISTANCE 3: " + rayDistance);
                     float currentRowMax = Mathf.Ceil(rayDistance / (unitSize + separation));
+                    float lastRowPos = 0f;
                     for (int i = 0; i < unitCount; i++)
                     {
                         float positionStart = rowStartPosition.magnitude;
@@ -173,40 +165,34 @@ public class Selector_Unit : MonoBehaviour
                             // PERPENDICULAIRE/PRODUIT SCALAIRE : Vecteur  A(ax,ay) perpendiculaire à B(bx;by) si (ax*bx + ay*by) = 0 DANS UNITY: Vector3.Cross()
                             rowStartPosition = startPosition - (Vector3.Cross(dir, Vector3.up).normalized * nbRow);
                             rowEndPosition =  endPosition -  (Vector3.Cross(dir, Vector3.up).normalized * nbRow);
-
-                            //dir = (rowEndPosition - rowStartPosition);
+                            //Define new ray for the next row
                             mousDrag = new Ray(rowStartPosition, dir);
-                            /*
-                            if( (i-unitCount > 0) && (i - unitCount <= currentRowMax))
+                            if (Mathf.Floor(unitCount / currentRowMax) == nbRow)
                             {
-                                positionStart = ((rowStartPosition / 2f) + (rowEndPosition / 2f)).magnitude;
-                                UnitFormationIndicators[i].transform.position = mousDrag.GetPoint(Mathf.Abs(positionStart * ((i - currentRowMax) * nbRow) * 0.05f));
-                                Debug.Log("positionStartDERNIERELIGNE: " + Mathf.Abs(positionStart * (Mathf.Min(1, (i - currentRowMax * nbRow)) * 0.05f)));
+                                //determin if the last row position unit is align or between 2 unit from the front row
+                                if (currentRowMax % 2 == 0)
+                                {
+                                    //PAIR DONC moitié du nombre d'unité restant sur la dernière rangé
+                                    lastRowPos = Mathf.Ceil((currentRowMax - (unitCount - nbRow * currentRowMax)) /2) * (unitSize + separation);
+                                }
+                                else
+                                {
+                                    //IMPAIR DONC (moitié du nombre d'unité restant arrondi inférieur + moitié d'une unité) sur la dernière rangé
+                                    //On doit mettre le "-" pour le CEIL car 0.5 CEIL = 1 ET NON 0 PAR CONTRE CEIL(-0.5) = 0
+                                    lastRowPos = ((unitSize + separation)/2) + Mathf.Abs( (Mathf.Ceil(-( (currentRowMax - (unitCount - nbRow * currentRowMax)) / 2) * (unitSize + separation) )) );
+                                }
                             }
-                            else
-                            {
-                                //positionStart = rowStartPosition.magnitude;
-                                UnitFormationIndicators[i].transform.position = mousDrag.GetPoint(Mathf.Abs(positionStart * ((i - currentRowMax * nbRow) * 0.05f)));
-                            }
-                            */
-                            //UnitFormationIndicators[i].transform.position = mousDrag.GetPoint(Mathf.Abs(positionStart * ((i - currentRowMax * nbRow) * 0.05f)));
 
-                            //CI DESSOUS REPRODUIT LE BUG MAIS PARTOUT
-                            UnitFormationIndicators[i].transform.position = mousDrag.GetPoint(Mathf.Abs(((i - currentRowMax * nbRow) * 0.5f)));
-                            //DEBUG HELP
-                            Debug.DrawLine(rowStartPosition, rowEndPosition);
-                            Debug.DrawLine(Vector3.Cross(dir, Vector3.up), rowEndPosition);
+                            UnitFormationIndicators[i].transform.position = mousDrag.GetPoint(Mathf.Abs(lastRowPos + ((i - currentRowMax * nbRow) * (unitSize + separation))));
                         }
+                        //lastRow
                         else
                         {
-                            //UnitFormationIndicators[i].transform.position = mousDrag.GetPoint(Mathf.Abs(positionStart * ((i - (currentRowMax * nbRow)) * 0.05f)));
-
-                            //CI DESSOUS REPRODUIT LE BUG MAIS PARTOUT
-                           UnitFormationIndicators[i].transform.position = mousDrag.GetPoint(Mathf.Abs(((i - currentRowMax * nbRow) * 0.5f)));
-                            Debug.Log("DISTANCE TROUPES: " + Mathf.Abs(positionStart * ((i - (currentRowMax * nbRow)) * 0.05f)));
+                            UnitFormationIndicators[i].transform.position = mousDrag.GetPoint(Mathf.Abs(lastRowPos + ((i - currentRowMax * nbRow) * (unitSize + separation))));
                         }
                     }
                 }
+                //LINE TOO BIG
                 else
                 {
                     for (int i = 0; i < unitCount; i++)
@@ -216,21 +202,14 @@ public class Selector_Unit : MonoBehaviour
                             nbRow += 1;
                             rowStartPosition = startPosition - (Vector3.Cross(dir, Vector3.up).normalized * nbRow);
                             rowEndPosition = endPosition - (Vector3.Cross(dir, Vector3.up).normalized * nbRow);
-                            //dir = (rowEndPosition - rowStartPosition);
                             mousDrag = new Ray(rowStartPosition, dir);
 
-                            UnitFormationIndicators[i].transform.position = mousDrag.GetPoint(Mathf.Abs(((i - minRowFormation * nbRow) * 0.5f)));
-                            //UnitFormationIndicators[i].transform.position = mousDrag.GetPoint(Mathf.Abs(rowStartPosition.magnitude * ((i - minRowFormation * nbRow) * 0.05f)));
-                            
-                            //DEBUG HELP
-                            Debug.DrawLine(rowStartPosition, rowEndPosition);
-                            Debug.DrawLine(Vector3.Cross(dir, Vector3.up), rowEndPosition);
+                            UnitFormationIndicators[i].transform.position = mousDrag.GetPoint(Mathf.Abs(((i - minRowFormation * nbRow) * (unitSize + separation))));
                         }
 
                         else
                         {
-                            UnitFormationIndicators[i].transform.position = mousDrag.GetPoint(Mathf.Abs(((i - minRowFormation * nbRow) * 0.5f)));
-                            //UnitFormationIndicators[i].transform.position = mousDrag.GetPoint(Mathf.Abs(rowStartPosition.magnitude * ((i - (minRowFormation * nbRow)) * 0.05f)));
+                            UnitFormationIndicators[i].transform.position = mousDrag.GetPoint(Mathf.Abs(((i - minRowFormation * nbRow) * (unitSize + separation))));
                         }
                     }
                 }
