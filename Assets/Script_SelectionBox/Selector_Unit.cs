@@ -50,9 +50,14 @@ public class Selector_Unit : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         if(Input.GetMouseButtonDown(0))
         {
             startPosition = DoRay();
+            //Load Prefab
+            selectorBox = Resources.Load<GameObject>("SelectionBox/SelectorBox");
+            selectorBox = Instantiate(selectorBox, startPosition, Quaternion.identity);
+
             selectorBox.SetActive(true);
         }
         //Draw the selection rectangle
@@ -67,6 +72,9 @@ public class Selector_Unit : MonoBehaviour
         if (Input.GetMouseButtonUp(0))
         {
             selectorBox.SetActive(false);
+            //Destroy Prefab
+            Destroy(selectorBox.gameObject);
+
             endPosition = DoRay();
             HandleRectangle();
             SelectAllUnits();
@@ -77,8 +85,16 @@ public class Selector_Unit : MonoBehaviour
             if (Input.GetMouseButtonDown(1))
             {
                 startPosition = DoRay();
+                //Prefab generation and transform
+                //1 Load and create prefab
+                //2 Give to the prefab the correct size (size of unit selected)
+                //3 Destroy the prefab
+
+                Unit_FormationIndicatorSize = Resources.Load<GameObject>("SelectionBox/Unit_FormationIndicator");
+                Unit_FormationIndicatorSize = Instantiate(Unit_FormationIndicatorSize, startPosition, Quaternion.identity);
                 //Give the correct form to the formation tool depending of the scale of the unit selected
                 Unit_FormationIndicatorSize = UnitFormationCylinder(selectedUnits[0].transform);
+                Destroy(Unit_FormationIndicatorSize.gameObject);
 
                 Vector3 newPlacement = startPosition;
                 for (int i = 0; i < selectedUnits.Count; i++)
@@ -232,7 +248,7 @@ public class Selector_Unit : MonoBehaviour
     private GameObject UnitFormationCylinder(Transform Unitscale)
     {
         //a terme DEVRA repéré cavalerie = triangle; troupe à pied = cylindre
-        Unit_FormationIndicatorSize = GameObject.Find("Unit_FormationIndicator");
+        Unit_FormationIndicatorSize = GameObject.FindGameObjectWithTag("UnitPlacementIndicator");
         Unit_FormationIndicatorSize.transform.localScale = Unitscale.localScale;
 
         return Unit_FormationIndicatorSize;
