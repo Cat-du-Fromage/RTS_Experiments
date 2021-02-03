@@ -136,8 +136,8 @@ public class Selector_Unit : MonoBehaviour
                         if (i != 0 && i % maxRowFormation == 0)
                         {
                             nbRow += 1;
-                            rowStartPosition = startPosition - (Vector3.Cross(dir, Vector3.up).normalized * nbRow);
-                            rowEndPosition = endPosition - (Vector3.Cross(dir, Vector3.up).normalized * nbRow);
+                            rowStartPosition = startPosition - (Vector3.Cross(dir, Vector3.up).normalized * nbRow * (unitSize + separation));
+                            rowEndPosition = endPosition - (Vector3.Cross(dir, Vector3.up).normalized * nbRow * (unitSize + separation));
                             dir = (rowEndPosition - rowStartPosition);
                             mousDrag = new Ray(rowStartPosition, dir);
                             UnitFormationIndicators[i].transform.position = mousDrag.GetPoint(Mathf.Abs(((i - maxRowFormation * nbRow) * (unitSize + separation))));
@@ -163,8 +163,8 @@ public class Selector_Unit : MonoBehaviour
                             nbRow += 1;
                             //TRANSLATION D'UN VECTOR SUR UNE DISTANCE X Vector3 newSpot = oldSpotVector3 + (directionVector3.normalized * distanceFloat)
                             // PERPENDICULAIRE/PRODUIT SCALAIRE : Vecteur  A(ax,ay) perpendiculaire à B(bx;by) si (ax*bx + ay*by) = 0 DANS UNITY: Vector3.Cross()
-                            rowStartPosition = startPosition - (Vector3.Cross(dir, Vector3.up).normalized * nbRow);
-                            rowEndPosition =  endPosition -  (Vector3.Cross(dir, Vector3.up).normalized * nbRow);
+                            rowStartPosition = startPosition - (Vector3.Cross(dir, Vector3.up).normalized * nbRow * (unitSize + separation));
+                            rowEndPosition =  endPosition -  (Vector3.Cross(dir, Vector3.up).normalized * nbRow * (unitSize + separation));
                             //Define new ray for the next row
                             mousDrag = new Ray(rowStartPosition, dir);
                             if (Mathf.Floor(unitCount / currentRowMax) == nbRow)
@@ -200,8 +200,8 @@ public class Selector_Unit : MonoBehaviour
                         if (i != 0 && i % minRowFormation == 0)
                         {
                             nbRow += 1;
-                            rowStartPosition = startPosition - (Vector3.Cross(dir, Vector3.up).normalized * nbRow);
-                            rowEndPosition = endPosition - (Vector3.Cross(dir, Vector3.up).normalized * nbRow);
+                            rowStartPosition = startPosition - (Vector3.Cross(dir, Vector3.up).normalized * nbRow * (unitSize + separation));
+                            rowEndPosition = endPosition - (Vector3.Cross(dir, Vector3.up).normalized * nbRow * (unitSize + separation));
                             mousDrag = new Ray(rowStartPosition, dir);
 
                             UnitFormationIndicators[i].transform.position = mousDrag.GetPoint(Mathf.Abs(((i - minRowFormation * nbRow) * (unitSize + separation))));
@@ -228,7 +228,7 @@ public class Selector_Unit : MonoBehaviour
         Debug.DrawLine(startPosition, endPosition);
     }
 
-private GameObject UnitFormationCylinder(Transform Unitscale)
+    private GameObject UnitFormationCylinder(Transform Unitscale)
     {
         //a terme DEVRA repéré cavalerie = triangle; troupe à pied = cylindre
         Unit_FormationIndicatorSize = GameObject.Find("Unit_FormationIndicator");
