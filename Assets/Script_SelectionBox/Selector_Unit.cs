@@ -71,7 +71,7 @@ public class Selector_Unit : MonoBehaviour
             HandleRectangle();
             SelectAllUnits();
         }
-        //Mouvement ICI
+        //Placement/formation of units
         if(selectedUnits.Count > 0)
         {
             if (Input.GetMouseButtonDown(1))
@@ -215,10 +215,11 @@ public class Selector_Unit : MonoBehaviour
                 }
                 
             }
-            
+            //for now it destroy the placeholders
+            //next, placeholders shall remain on the terrain until units move to their position.
             if (Input.GetMouseButtonUp(1))
             {
-                foreach(GameObject clone in UnitFormationIndicators)
+                foreach (GameObject clone in UnitFormationIndicators)
                 {
                     Destroy(clone.gameObject);
                 }
@@ -254,13 +255,19 @@ public class Selector_Unit : MonoBehaviour
         for(int i = 0; i < selectedUnits.Count; i++)
         {
             Units unit = selectedUnits[i].GetComponent<Units>();
-            // changement de couleur ici normalement
+            // change colors for indication "temporary solution"
             Renderer rSelect = selectedUnits[i].GetComponent<Renderer>();
             Material mSelect = rSelect.material;
             mSelect.color = UnityEngine.Color.blue;
         }
         //Remove every component in the list
         selectedUnits.Clear();
+        //temporary: avoid bug when placing + left Click
+        foreach (GameObject clone in UnitFormationIndicators)
+        {
+            Destroy(clone.gameObject);
+        }
+        UnitFormationIndicators.Clear();
     }
 
     private void SelectAllUnits()
