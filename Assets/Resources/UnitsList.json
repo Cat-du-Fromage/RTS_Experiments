@@ -1,0 +1,36 @@
+{
+    "Units":
+    [
+        {
+            "name": "PrussianFusilier",
+            "CombatMelee": "12",
+            "CombatRange": "15",
+            "LifePoint": "100",
+            "SizeRegiment": "20"
+        },
+
+        {
+            "name": "FrenchFusilier",
+            "CombatMelee": "10",
+            "CombatRange": "12",
+            "LifePoint": "166",
+            "SizeRegiment": "50"
+        },
+
+        {
+            "name": "BritishFusilier",
+            "CombatMelee": "11",
+            "CombatRange": "18",
+            "LifePoint": "110",
+            "SizeRegiment": "30"
+        },
+
+        {
+            "name": "Swordsmen",
+            "CombatMelee": "25",
+            "CombatRange": "0",
+            "LifePoint": "170",
+            "SizeRegiment": "25"
+        }
+    ]
+}

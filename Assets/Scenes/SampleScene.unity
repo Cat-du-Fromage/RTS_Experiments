@@ -154,6 +154,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0821187ccfacd3e41be292dabd7443ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UnitsListJSON: {fileID: 0}
+  myUnitsList:
+    Units: []
 --- !u!54 &42959115
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -278,6 +281,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0821187ccfacd3e41be292dabd7443ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UnitsListJSON: {fileID: 0}
+  myUnitsList:
+    Units: []
 --- !u!54 &106088468
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -402,6 +408,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0821187ccfacd3e41be292dabd7443ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UnitsListJSON: {fileID: 0}
+  myUnitsList:
+    Units: []
 --- !u!54 &451243136
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -526,6 +535,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0821187ccfacd3e41be292dabd7443ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UnitsListJSON: {fileID: 0}
+  myUnitsList:
+    Units: []
 --- !u!54 &513275729
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -650,6 +662,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0821187ccfacd3e41be292dabd7443ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UnitsListJSON: {fileID: 0}
+  myUnitsList:
+    Units: []
 --- !u!54 &609487949
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -774,6 +789,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0821187ccfacd3e41be292dabd7443ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UnitsListJSON: {fileID: 0}
+  myUnitsList:
+    Units: []
 --- !u!54 &626962410
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -990,6 +1008,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0821187ccfacd3e41be292dabd7443ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UnitsListJSON: {fileID: 0}
+  myUnitsList:
+    Units: []
 --- !u!54 &848749258
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1091,6 +1112,7 @@ GameObject:
   m_Component:
   - component: {fileID: 915196367}
   - component: {fileID: 915196366}
+  - component: {fileID: 915196368}
   m_Layer: 0
   m_Name: Selector
   m_TagString: Untagged
@@ -1141,6 +1163,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &915196368
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 915196365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d30361c37237354f95f18c154baa363, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UnitsList:
+    Units: []
+  textJSON: {fileID: 4900000, guid: 02d2c250867a7f3469c4d1f28c7c08b2, type: 3}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -1257,6 +1294,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0821187ccfacd3e41be292dabd7443ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UnitsListJSON: {fileID: 0}
+  myUnitsList:
+    Units: []
 --- !u!54 &986635158
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1487,6 +1527,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0821187ccfacd3e41be292dabd7443ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UnitsListJSON: {fileID: 0}
+  myUnitsList:
+    Units: []
 --- !u!54 &1063866349
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1611,6 +1654,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0821187ccfacd3e41be292dabd7443ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UnitsListJSON: {fileID: 0}
+  myUnitsList:
+    Units: []
 --- !u!54 &1232723542
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1735,6 +1781,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0821187ccfacd3e41be292dabd7443ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UnitsListJSON: {fileID: 0}
+  myUnitsList:
+    Units: []
 --- !u!54 &1464102346
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1859,6 +1908,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0821187ccfacd3e41be292dabd7443ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UnitsListJSON: {fileID: 0}
+  myUnitsList:
+    Units: []
 --- !u!54 &1525389946
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1983,6 +2035,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0821187ccfacd3e41be292dabd7443ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UnitsListJSON: {fileID: 0}
+  myUnitsList:
+    Units: []
 --- !u!54 &1661250615
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2198,6 +2253,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0821187ccfacd3e41be292dabd7443ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UnitsListJSON: {fileID: 0}
+  myUnitsList:
+    Units: []
 --- !u!1 &1730493410
 GameObject:
   m_ObjectHideFlags: 0
@@ -2231,6 +2289,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0821187ccfacd3e41be292dabd7443ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UnitsListJSON: {fileID: 0}
+  myUnitsList:
+    Units: []
 --- !u!54 &1730493412
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2355,6 +2416,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0821187ccfacd3e41be292dabd7443ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UnitsListJSON: {fileID: 0}
+  myUnitsList:
+    Units: []
 --- !u!54 &1855207502
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2570,6 +2634,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0821187ccfacd3e41be292dabd7443ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UnitsListJSON: {fileID: 0}
+  myUnitsList:
+    Units: []
 --- !u!1 &2046734093
 GameObject:
   m_ObjectHideFlags: 0
@@ -2603,6 +2670,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0821187ccfacd3e41be292dabd7443ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UnitsListJSON: {fileID: 0}
+  myUnitsList:
+    Units: []
 --- !u!54 &2046734095
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2818,6 +2888,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0821187ccfacd3e41be292dabd7443ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UnitsListJSON: {fileID: 0}
+  myUnitsList:
+    Units: []
 --- !u!1 &2110876752
 GameObject:
   m_ObjectHideFlags: 0
@@ -2851,6 +2924,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0821187ccfacd3e41be292dabd7443ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UnitsListJSON: {fileID: 0}
+  myUnitsList:
+    Units: []
 --- !u!54 &2110876754
 Rigidbody:
   m_ObjectHideFlags: 0
