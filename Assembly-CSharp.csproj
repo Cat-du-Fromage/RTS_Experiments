@@ -69,10 +69,8 @@
     <Compile Include="Assets\Script\Script_SelectionBox\Selector_Unit.cs" />
     <Compile Include="Assets\Units\JSON_UnitsList.cs" />
     <Compile Include="Assets\Units\JsonUSE\JsonHelper.cs" />
-    <Compile Include="Assets\Units\JsonUSE\Units.cs" />
-    <Compile Include="Assets\Units\JsonUSE\UnitsList.cs" />
+    <Compile Include="Assets\Units\Units.cs" />
     <None Include="Assets\Packages\Newtonsoft.Json.12.0.3\lib\netstandard2.0\Newtonsoft.Json.xml" />
-    <None Include="Assets\Units\Database\UnitsListJSON.txt" />
     <Reference Include="UnityEngine">
       <HintPath>G:/Jeux/Unity/Project/2019.4.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>
