@@ -3,31 +3,46 @@ using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Linq;
+using System.IO;
 using System;
 
 public class JSON_UnitsList : MonoBehaviour
 {
     //public UnitsList UnitsList = new UnitsList();
     public TextAsset textJSON;
-    public List<object> Unitslist = new List<object>();
+    public List<Unit> Unitslist;
 
     // Start is called before the first frame update
     void Start()
     {
-        textJSON = Resources.Load("UnitsList") as TextAsset;
-        if (textJSON != null)
+        /*
+        Unit unit = new Unit("name", 1, 1, 1, Unit.Grades.foot);
+        switch(unit.grade)
         {
-            Dictionary<string, object> json = JsonConvert.DeserializeObject<Dictionary<string, object>>(textJSON.text);
-            JArray jsonUnits = (JArray)json["Units"];
-            foreach (JObject a in jsonUnits)
-            {
-                Unitslist.Add(new Units(a["name"].ToString(), (int)a["CombatMelee"], (int)a["CombatRange"], (int)a["LifePoint"], (int)a["SizeRegiment"]));
-            }
+            case Unit.Grades.artillerie:
+                Debug.Log("arti");
+                break;
+            case Unit.Grades.foot:
+                Debug.Log("foot");
+                break;
+            case Unit.Grades.horse:
+                Debug.Log("horse");
+                break;
         }
-        else
-        {
-            print("PAS de JSON");
-        }
+        */
+        string jsonUnitsList = File.ReadAllText("Assets/Resources/UnitsList.json");
+        JObject jsonUnitObject = JObject.Parse(jsonUnitsList);
+        //[JsonProperty("fld_descr")]
+        Unitslist = jsonUnitObject["Units"].ToObject<List<Unit>>();
+        
+        Debug.Log(Unitslist[0].Name);
+        Debug.Log(Unitslist[1].Name);
+        Debug.Log(Unitslist[2].Name);
+
+        Console.WriteLine("\nExists: Unirs with name=PrussianSoldier: {0}",
+            Unitslist.Exists(item => item.Name == "PrussianSoldier"));
+        
     }
 }
 

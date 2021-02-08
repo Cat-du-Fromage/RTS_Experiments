@@ -1,17 +1,25 @@
 ﻿using System;
 
-[Serializable]
-public class Units
+public class Unit
 {
     #region Attributs
-    private string _name { get;}
-    private int _combatMelee { get;}
-    private int _combatRange { get;}
-    private int _lifePoint { get; set; }
-    private int _sizeRegiment { get; }
+    private string _name;
+    private int _combatMelee;
+    private int _combatRange;
+    private int _lifePoint;
+    private int _sizeRegiment;
+    /*
+     public enum Grades
+    {
+        foot,
+        horse,
+        artillerie
+    };
+    private Grades _grade;
+    */
     #endregion Attributs
     /// <summary>
-    /// Constructor of a single Unit (not the group)
+    /// Constructor, need a Regiment to exist
     /// </summary>
     /// <param name="_name">Unit Name</param>
     /// <param name="_combatMelee">Melee combat value</param>
@@ -19,13 +27,14 @@ public class Units
     /// <param name="_lifePoint">life point</param>
     /// <param name="_sizeRegiment">size of a regiment/group</param>
     #region Constructor
-    public Units(string _name, int _combatMelee, int _combatRange, int _lifePoint, int _sizeRegiment)
+    public Unit(string name, int combatMelee, int combatRange, int lifePoint, int sizeRegiment)
     {
-        this._name = _name;
-        this._combatMelee = _combatMelee;
-        this._combatRange = _combatRange;
-        this._lifePoint = _lifePoint;
-        this._sizeRegiment = _sizeRegiment;
+        _name = name;
+        _combatMelee = combatMelee;
+        _combatRange = combatRange;
+        _lifePoint = lifePoint;
+        //json regiment
+        _sizeRegiment = sizeRegiment;
     }
     #endregion Constructor
 
@@ -69,5 +78,11 @@ public class Units
     {
         get { return _sizeRegiment; }
     }
+    /*
+    public Grades grade
+    {
+        get { return _grade; }
+    }
+    */
     #endregion Accessors
 }

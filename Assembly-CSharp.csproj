@@ -67,6 +67,7 @@
     <Compile Include="Assets\Script\Script_SelectionBox\Placement_Unit.cs" />
     <Compile Include="Assets\Script\Script_SelectionBox\Selection_Utils.cs" />
     <Compile Include="Assets\Script\Script_SelectionBox\Selector_Unit.cs" />
+    <Compile Include="Assets\Script\UI_Menu\Button_UnitSpawn.cs" />
     <Compile Include="Assets\Units\JSON_UnitsList.cs" />
     <Compile Include="Assets\Units\JsonUSE\JsonHelper.cs" />
     <Compile Include="Assets\Units\Units.cs" />
