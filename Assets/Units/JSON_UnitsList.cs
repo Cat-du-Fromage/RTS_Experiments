@@ -13,6 +13,7 @@ public class JSON_UnitsList : MonoBehaviour
     public TextAsset textJSON;
     public List<Unit> Unitslist;
     public List<GameObject> UnitPrefabList = new List<GameObject>();
+    private Unit _unit;
 
     // Start is called before the first frame update
     void Start()
@@ -57,7 +58,8 @@ public class JSON_UnitsList : MonoBehaviour
         }
 
         //TEST
-        Instantiate(Unitslist[0].UnitPrefab, new Vector3(-4f,3f,-6f), Quaternion.identity);
+        //COMMENT TROUVER LE PREFAB PAR RAPPORT A UN AUTRE ATTRIBUT
+        Instantiate(Unitslist.Find(x => x.Name.Contains("British")).UnitPrefab, new Vector3(-4f,3f,-6f), Quaternion.identity);
     }
 }
 
