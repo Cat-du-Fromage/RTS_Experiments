@@ -1155,6 +1155,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textJSON: {fileID: 4900000, guid: 02d2c250867a7f3469c4d1f28c7c08b2, type: 3}
+  UnitPrefabList: []
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -1834,7 +1835,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1464102344}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.67, y: 3, z: -3.78}
+  m_LocalPosition: {x: -3.67, y: 3, z: -3.83}
   m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_Children: []
   m_Father: {fileID: 0}

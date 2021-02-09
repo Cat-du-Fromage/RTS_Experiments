@@ -12,6 +12,7 @@ public class JSON_UnitsList : MonoBehaviour
     //public UnitsList UnitsList = new UnitsList();
     public TextAsset textJSON;
     public List<Unit> Unitslist;
+    public List<GameObject> UnitPrefabList = new List<GameObject>();
 
     // Start is called before the first frame update
     void Start()
@@ -31,6 +32,7 @@ public class JSON_UnitsList : MonoBehaviour
                 break;
         }
         */
+        //Stats Units List
         string jsonUnitsList = File.ReadAllText("Assets/Resources/UnitsList.json");
         JObject jsonUnitObject = JObject.Parse(jsonUnitsList);
         //[JsonProperty("fld_descr")]
@@ -42,7 +44,20 @@ public class JSON_UnitsList : MonoBehaviour
 
         Console.WriteLine("\nExists: Unirs with name=PrussianSoldier: {0}",
             Unitslist.Exists(item => item.Name == "PrussianSoldier"));
-        
+
+        //Load all Prefabs and add them to a list
+        foreach (GameObject unitModel in Resources.LoadAll("Prefabs/Units", typeof(GameObject)))
+        {
+            UnitPrefabList.Add(unitModel);
+        }
+        //Attribut the conrresponding prefab to each unit of THE UNITSLIST
+        foreach (Unit unit in Unitslist)
+        {
+            unit.UnitPrefab = UnitPrefabList.Where(x => x.name.Contains(unit.Name)).SingleOrDefault();
+        }
+
+        //TEST
+        Instantiate(Unitslist[0].UnitPrefab, new Vector3(-4f,3f,-6f), Quaternion.identity);
     }
 }
 

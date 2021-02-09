@@ -1,13 +1,17 @@
-﻿using System;
+﻿using UnityEngine;
+using System.Linq;
+using System.IO;
+using System;
 
 public class Unit
 {
+    //JSON_UnitsList prefabList;
     #region Attributs
     private string _name;
     private int _combatMelee;
     private int _combatRange;
     private int _lifePoint;
-    private int _sizeRegiment;
+    private GameObject _unitPrefab;
     /*
      public enum Grades
     {
@@ -27,18 +31,18 @@ public class Unit
     /// <param name="_lifePoint">life point</param>
     /// <param name="_sizeRegiment">size of a regiment/group</param>
     #region Constructor
-    public Unit(string name, int combatMelee, int combatRange, int lifePoint, int sizeRegiment)
+    public Unit(string name, int combatMelee, int combatRange, int lifePoint)
     {
         _name = name;
         _combatMelee = combatMelee;
         _combatRange = combatRange;
         _lifePoint = lifePoint;
-        //json regiment
-        _sizeRegiment = sizeRegiment;
+        //_unitPrefab = prefabList.UnitPrefabList.Where(x => x.name == name).SingleOrDefault();
     }
     #endregion Constructor
 
     #region Methods
+
     #endregion Methods
 
     #region Accessors
@@ -72,17 +76,12 @@ public class Unit
         set { _lifePoint = value; }
     }
     /// <summary>
-    /// return how many unit compose a regiment/group
+    /// Get Unit Model/Mesh/Prefab
     /// </summary>
-    public int SizeRegiment
+    public GameObject UnitPrefab
     {
-        get { return _sizeRegiment; }
+        get { return _unitPrefab; }
+        set { _unitPrefab = value; }
     }
-    /*
-    public Grades grade
-    {
-        get { return _grade; }
-    }
-    */
     #endregion Accessors
 }
